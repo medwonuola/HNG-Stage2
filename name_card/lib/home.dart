@@ -19,6 +19,7 @@ class EditCard extends StatefulWidget {
 
 class _EditCardState extends State<EditCard> {
   late Color cardColor;
+  late Color textColor;
   late String name;
   late String syllables;
   late String connotation;
@@ -32,6 +33,7 @@ class _EditCardState extends State<EditCard> {
     syllables = "pro-nun-ci-a-tion";
     connotation = "name connotation or meaning";
     cardColor = Colors.yellowAccent;
+    textColor = Colors.black;
   }
 
   @override
@@ -47,7 +49,7 @@ class _EditCardState extends State<EditCard> {
             },
           )
         ],
-        title: Text("Name Card"),
+        title: Text("Edit"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
@@ -62,49 +64,80 @@ class _EditCardState extends State<EditCard> {
                     child: _nameCard(context)),
               ],
             ),
-            GestureDetector(
-                onTap: () async {
-                  final Color newColor = await showColorPickerDialog(
-                    context,
-                    cardColor,
-                    title: Text('Pick a color',
-                        style: Theme.of(context).textTheme.headline6),
-                    width: 40,
-                    height: 40,
-                    spacing: 8,
-                    runSpacing: 8,
-                    borderRadius: 4,
-                    colorCodeHasColor: true,
-                    enableShadesSelection: false,
-                    pickersEnabled: <ColorPickerType, bool>{
-                      ColorPickerType.accent: true,
-                      ColorPickerType.primary: false,
-                    },
-                    actionButtons: const ColorPickerActionButtons(
-                      okButton: true,
-                      dialogActionButtons: false,
-                    ),
-                  );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
 
-                  setState(() {
-                    cardColor = newColor;
-                  });
-                },
-                child: Column(
-                  children: [
-                    Text("Change Color",
-                        style: TextStyle(fontWeight: FontWeight.w600)),
-                    Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                GestureDetector(
+                  onTap: () {
+
+                    setState(() {
+                      if (textColor == Colors.black)
+                        textColor = Colors.white;
+                      else
+                        textColor = Colors.black;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Text("Change Text Color",
+                          style: TextStyle(fontWeight: FontWeight.w600)),
+                      Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.tonality, size: 48))),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () async {
+                      final Color newColor = await showColorPickerDialog(
+                        context,
+                        cardColor,
+                        title: Text('Pick a color',
+                            style: TextStyle(color: textColor)),
+                        width: 40,
+                        height: 40,
+                        spacing: 8,
+                        runSpacing: 8,
+                        borderRadius: 4,
+                        colorCodeHasColor: true,
+                        enableShadesSelection: false,
+                        pickersEnabled: <ColorPickerType, bool>{
+                          ColorPickerType.accent: true,
+                          ColorPickerType.primary: false,
+                        },
+                        actionButtons: const ColorPickerActionButtons(
+                          okButton: true,
+                          dialogActionButtons: false,
                         ),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.palette,
-                                size: 48, color: cardColor))),
-                  ],
-                )),
+                      );
+
+                      setState(() {
+                        cardColor = newColor;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Text("Change Color",
+                            style: TextStyle(fontWeight: FontWeight.w600)),
+                        Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.palette,
+                                    size: 48, color: cardColor))),
+                      ],
+                    )),
+              ],
+            ),
             SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -138,7 +171,7 @@ class _EditCardState extends State<EditCard> {
               Expanded(
                   flex: 1,
                   child: GestureDetector(
-                      onTap: () => _showMyDialog("Name", (String text) {
+                      onTap: () => _showMyDialog("Name", name,(String text) {
                             setState(() {
                               setState(() {
                                 name = text;
@@ -148,13 +181,13 @@ class _EditCardState extends State<EditCard> {
                           }),
                       child: Text(name.capitalize,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: TextStyle(color: textColor,
                               fontSize: 24, fontWeight: FontWeight.bold)))),
               Expanded(
                   flex: 1,
                   child: GestureDetector(
                       onTap: () =>
-                          _showMyDialog("Pronunciation", (String text) {
+                          _showMyDialog("Pronunciation", syllables, (String text) {
                             setState(() {
                               setState(() {
                                 syllables = text;
@@ -164,11 +197,11 @@ class _EditCardState extends State<EditCard> {
                           }),
                       child: Text("/${syllables.toLowerCase()}/",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16)))),
+                          style: TextStyle(color: textColor,fontSize: 16)))),
               Expanded(
                 flex: 4,
                 child: GestureDetector(
-                    onTap: () => _showMyDialog("Connotation", (String text) {
+                    onTap: () => _showMyDialog("Connotation", connotation, (String text) {
                           setState(() {
                             setState(() {
                               connotation = text;
@@ -180,7 +213,7 @@ class _EditCardState extends State<EditCard> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(connotation,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: TextStyle(color: textColor,
                                 fontSize: 18, fontWeight: FontWeight.bold)))),
               ),
               Spacer(flex: 1),
@@ -189,7 +222,9 @@ class _EditCardState extends State<EditCard> {
     );
   }
 
-  Future<void> _showMyDialog(String title, Function(String) onSubmitted) async {
+  Future<void> _showMyDialog(String title, String defaultText, Function(String) onSubmitted) async {
+    TextEditingController _controller = TextEditingController();
+    _controller.text = defaultText;
     return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -198,19 +233,22 @@ class _EditCardState extends State<EditCard> {
             title: Text("Change $title"),
             content: TextField(
               onSubmitted: onSubmitted,
-
+              textAlign: TextAlign.center,
+              controller: _controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
             actions: <Widget>[
-              Expanded(
-                  child: Center(
-                      child: TextButton(
-                          child: const Text('Cancel', style: TextStyle(color: Colors.red),),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          })))
+              Center(
+                  child: TextButton(
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }))
             ],
           );
         });

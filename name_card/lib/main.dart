@@ -12,6 +12,7 @@ class NameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Name Card',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.yellow,
         primarySwatch: Colors.yellow,

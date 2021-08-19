@@ -19,7 +19,10 @@ class SaveAndShare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Save And Share"),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,11 +33,19 @@ class SaveAndShare extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(300, 56),
+                  ),
                     icon: Icon(Icons.save),
                     onPressed: () async {},
                     label: Text("Save to Gallery",
                         style: TextStyle(fontSize: 18))),
+                SizedBox(height: 16),
                 ElevatedButton.icon(
+
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(300, 56),
+                    ),
                     icon: Icon(Icons.share),
                     onPressed: () async {
                       await saveAndShare(imageFile);
